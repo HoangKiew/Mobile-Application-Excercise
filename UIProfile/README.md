@@ -30,5 +30,5 @@ Tên và địa chỉ hiển thị rõ ràng.
 
 Nền giao diện có màu sắc được tùy chỉnh.
 
-    ![alt text](<Screenshot 2025-09-30 121351.png>)
+   ![img.png](Profile_KetQua.png)
 
