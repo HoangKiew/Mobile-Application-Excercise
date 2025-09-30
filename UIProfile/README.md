@@ -30,5 +30,7 @@ Tên và địa chỉ hiển thị rõ ràng.
 
 Nền giao diện có màu sắc được tùy chỉnh.
 
-   ![img.png](Profile_KetQua.png)
+<img width="365" height="657" alt="image" src="https://github.com/user-attachments/assets/63f24c09-fe47-467e-a689-20c18ba35271" />
+
+
 
