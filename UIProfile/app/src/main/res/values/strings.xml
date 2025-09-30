@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">UI Profile</string>
+    <string name="back">Back</string>
+    <string name="edit">Edit</string>
+    <string name="name">Hoàng Mai Kiều</string>
+    <string name="location">Hồ Chí Minh, Việt Nam</string>
+</resources>
