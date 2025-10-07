@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFEEF4">
+
+    <!-- Nút quay lại -->
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:background="@null"
+        android:src="@drawable/icons_back"
+        android:contentDescription="Quay lại"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="THỰC HÀNH 03"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp" />
+
+    <!-- Ô nhập số -->
+    <EditText
+        android:id="@+id/edtNumber"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/bg_edittext"
+        android:hint="Nhập vào số lượng"
+        android:inputType="number"
+        android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Nút tạo -->
+    <Button
+        android:id="@+id/btnTao"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:text="Tạo"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:backgroundTint="#FFA6C9"
+        app:layout_constraintTop_toTopOf="@id/edtNumber"
+        app:layout_constraintBottom_toBottomOf="@id/edtNumber"
+        app:layout_constraintStart_toEndOf="@id/edtNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="10dp"/>
+
+    <!-- TextView hiển thị thông báo -->
+    <TextView
+        android:id="@+id/tvThongBao"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#FFA6C9"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/edtNumber"
+        app:layout_constraintStart_toStartOf="@id/edtNumber"
+        app:layout_constraintEnd_toEndOf="@id/edtNumber"
+        android:layout_marginTop="16dp"/>
+
+    <!-- Khu vực hiển thị danh sách số -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvThongBao"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/containerNumbers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="32dp"
+            android:layout_gravity="center_horizontal"/>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
