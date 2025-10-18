@@ -58,8 +58,7 @@ fun WelcomeScreen(navController: NavController) {
         }
 
         Button(
-            // --- ĐÃ SỬA LẠI Ở ĐÂY ---
-            // Quay lại sử dụng chuỗi ký tự trực tiếp để không gây lỗi
+
             onClick = { navController.navigate("components") },
             modifier = Modifier
                 .fillMaxWidth()

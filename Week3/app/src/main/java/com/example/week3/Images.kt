@@ -30,11 +30,11 @@ import com.example.week3.ui.theme.Week3Theme
 fun ImagesScreen(navController: NavController) { // 1. Thêm NavController
     Scaffold(
         topBar = {
-            // --- PHẦN BẠN YÊU CẦU THÊM VÀO ---
+
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        text = "Images", // Tôi đã đổi tên cho phù hợp với màn hình
+                        text = "Images",
                         style = MaterialTheme.typography.titleLarge.copy(
                             fontWeight = FontWeight.Bold
                         ),
@@ -52,7 +52,7 @@ fun ImagesScreen(navController: NavController) { // 1. Thêm NavController
                 }
             )
         }
-    ) { innerPadding -> // 2. Scaffold cung cấp padding
+    ) { innerPadding -> // Scaffold cung cấp padding
         val imageId1 = R.drawable.image
         val imageId2 = R.drawable.uth_bg_05
 
@@ -61,13 +61,13 @@ fun ImagesScreen(navController: NavController) { // 1. Thêm NavController
 
         Column(
             modifier = Modifier
-                .padding(innerPadding) // 3. Áp dụng padding ở đây
+                .padding(innerPadding) //Áp dụng padding
                 .fillMaxSize()
                 .padding(horizontal = 24.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // --- Hình ảnh thứ nhất (từ drawable) ---
+            // --- Hình ảnh thứ nhất
             Image(
                 painter = painterResource(id = imageId1),
                 contentDescription = "Ảnh trường đại học",
@@ -78,7 +78,7 @@ fun ImagesScreen(navController: NavController) { // 1. Thêm NavController
                 contentScale = ContentScale.Crop
             )
 
-            // --- Link có thể nhấn vào ---
+            // --- Link  ---
             Text(
                 text = linkUrl,
                 modifier = Modifier.clickable {
@@ -91,7 +91,7 @@ fun ImagesScreen(navController: NavController) { // 1. Thêm NavController
                 textAlign = TextAlign.Center
             )
 
-            // --- Hình ảnh thứ hai (từ drawable) ---
+            // --- Hình ảnh thứ hai ---
             Image(
                 painter = painterResource(id = imageId2),
                 contentDescription = "Ảnh trường đại học",

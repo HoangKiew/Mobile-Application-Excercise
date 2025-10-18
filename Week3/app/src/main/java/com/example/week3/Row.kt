@@ -44,7 +44,6 @@ fun RowScreen(navController: NavController) {
             )
         }
     ) { innerPadding ->
-        // Column để xếp chồng 4 hàng lên nhau
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -52,7 +51,6 @@ fun RowScreen(navController: NavController) {
                 .padding(24.dp), // Padding cho toàn bộ nội dung
             verticalArrangement = Arrangement.spacedBy(16.dp) // Khoảng cách giữa các hàng
         ) {
-            // Lặp lại 4 lần để tạo 4 hàng giống nhau
             repeat(4) {
                 LayoutRow()
             }
@@ -60,21 +58,18 @@ fun RowScreen(navController: NavController) {
     }
 }
 
-// --- SỬA ĐỔI CHÍNH Ở ĐÂY ---
 @Composable
 fun LayoutRow() {
-    // 1. Dùng Box làm khung chứa bên ngoài
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp)) // Bo tròn khung
             .background(Color(0xFFF0F4F7)) // Nền xám nhạt cho khung
     ) {
-        // 2. Row chứa 3 hộp màu xanh, có padding bên trong khung
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp), // Padding bên trong khung xám
+                .padding(12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp) // Khoảng cách giữa các hộp xanh
         ) {
             val itemModifier = Modifier.weight(1f)
@@ -86,7 +81,6 @@ fun LayoutRow() {
     }
 }
 
-// Composable này giữ nguyên
 @Composable
 fun ItemBox(modifier: Modifier = Modifier, color: Color) {
     Box(

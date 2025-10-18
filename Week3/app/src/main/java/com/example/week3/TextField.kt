@@ -60,7 +60,7 @@ fun TextFieldScreen(navController: NavController) {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            // --- THAY ĐỔI 1: TẠO KHU VỰC NHẬP LIỆU CHIẾM 1/3 MÀN HÌNH ---
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -109,7 +109,7 @@ fun TextFieldScreen(navController: NavController) {
                 )
             }
 
-            // --- THAY ĐỔI 2: DANH SÁCH CHIẾM 2/3 MÀN HÌNH CÒN LẠI ---
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()

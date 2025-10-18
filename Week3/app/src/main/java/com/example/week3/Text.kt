@@ -71,11 +71,11 @@ fun TextScreen(navController: NavController) {
                         fontSize = 46.sp
                     )
                 ) {
-                    // Style con bên trong chỉ để in đậm chữ "B"
+
                     withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
                         append("B")
                     }
-                    // Chữ "rown" không có style con nên sẽ bình thường
+
                     append("rown ")
                 }
                 append("\nfox ")
@@ -88,13 +88,12 @@ fun TextScreen(navController: NavController) {
                     )
                 ) { append("over ") }
 
-                // 👇 CHỈNH LẠI ĐOẠN NÀY ĐỂ GIỐNG ẢNH
-                // 1. Gạch chân chữ "the"
+
                 withStyle(SpanStyle(textDecoration = TextDecoration.Underline)) {
                     append("the ")
                 }
 
-                // 2. Dùng FontFamily.Cursive cho chữ "lazy"
+
                 withStyle(
                     SpanStyle(
                         fontFamily = FontFamily.Cursive, // <-- Thêm dòng này để có kiểu chữ viết tay

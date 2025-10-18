@@ -180,7 +180,7 @@ fun ComponentCard(item: ComponentItem, navController: NavController) {
     }
 }
 
-/* ------------------------- HIỆU ỨNG SHIMMER (ĐÃ TỐI ƯU) -------------------------- */
+/* ------------------------- HIỆU ỨNG SHIMMER -------------------------- */
 
 fun Modifier.shimmerBackground(shape: androidx.compose.ui.graphics.Shape = RoundedCornerShape(8.dp)): Modifier = composed {
     // State để lưu kích thước của Composable
