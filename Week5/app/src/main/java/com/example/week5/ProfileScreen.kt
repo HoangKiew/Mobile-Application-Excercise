@@ -23,7 +23,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.week5.R // R của project em
+import com.google.firebase.auth.FirebaseUser
 
 // Màu xanh chủ đạo
 private val PrimaryBlue = Color(0xFF0084FF)
@@ -35,7 +37,8 @@ private val PrimaryBlue = Color(0xFF0084FF)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    onBackClick: () -> Unit = {}
+    user: FirebaseUser?,
+    onSignOutClick: () -> Unit = {}
 ) {
     Scaffold(
         // --- 1. TOP BAR ---
@@ -50,16 +53,8 @@ fun ProfileScreen(
                         fontSize = 22.sp
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBackIosNew,
-                            contentDescription = "Back",
-                            tint = PrimaryBlue,
-                            modifier = Modifier.size(28.dp)
-                        )
-                    }
-                },
+                // Không cần nút back ở đây nữa vì có nút Sign Out
+                navigationIcon = { },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = Color.Transparent // Nền trong suốt
                 )
@@ -67,10 +62,10 @@ fun ProfileScreen(
         },
 
         // --- 2. BOTTOM BAR ---
-        // Nút "Back" luôn nằm ở dưới đáy
+        // *** SỬA: Đổi thành nút "Sign Out" ***
         bottomBar = {
             Button(
-                onClick = onBackClick,
+                onClick = onSignOutClick, // Gọi hành động đăng xuất
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 16.dp)
@@ -81,7 +76,7 @@ fun ProfileScreen(
                 shape = RoundedCornerShape(26.dp) // Bo tròn
             ) {
                 Text(
-                    text = "Back",
+                    text = "Sign Out", // Đổi chữ
                     color = Color.White,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Medium
@@ -93,9 +88,6 @@ fun ProfileScreen(
         // Nội dung chính của màn hình
         containerColor = Color.White // Nền trắng
     ) { innerPadding ->
-        // innerPadding là khoảng đệm an toàn mà Scaffold cung cấp
-        // để nội dung không bị TopBar và BottomBar che khuất
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -106,16 +98,18 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             // --- Phần Avatar ---
-            AvatarSection()
+            // *** SỬA: Hiển thị ảnh từ URL của user ***
+            AvatarSection(photoUrl = user?.photoUrl?.toString())
 
             Spacer(modifier = Modifier.height(32.dp))
 
             // --- Các trường thông tin ---
-            InfoField(label = "Name", value = "Melissa Peters")
+            // *** SỬA: Hiển thị tên và email thật ***
+            InfoField(label = "Name", value = user?.displayName ?: "N/A")
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            InfoField(label = "Email", value = "melpeters@gmail.com")
+            InfoField(label = "Email", value = user?.email ?: "N/A")
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -131,21 +125,24 @@ fun ProfileScreen(
  * Phần Avatar (Ảnh đại diện và icon camera)
  */
 @Composable
-private fun AvatarSection() {
+private fun AvatarSection(photoUrl: String?) {
     Box(
         modifier = Modifier.size(140.dp)
     ) {
-        // Ảnh đại diện
-        Image(
-            painter = painterResource(id = R.drawable.avatar), // Ảnh em vừa thêm
+        // *** SỬA: Dùng AsyncImage của Coil để tải ảnh từ URL ***
+        AsyncImage(
+            model = photoUrl,
             contentDescription = "Profile Avatar",
+            placeholder = painterResource(id = R.drawable.avatar), // Ảnh mặc định
+            error = painterResource(id = R.drawable.avatar),      // Ảnh khi lỗi
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxSize()
                 .clip(CircleShape)
                 .border(1.dp, Color.LightGray, CircleShape)
         )
-        // Icon Camera
+
+        // Icon Camera (giữ nguyên)
         Surface(
             shape = CircleShape,
             color = Color.White,
@@ -213,7 +210,7 @@ private fun DateField(label: String, value: String) {
             color = Color.Black
         )
         Spacer(modifier = Modifier.height(8.dp))
-        // Hộp ngày sinh (Giả lập_
+        // Hộp ngày sinh (Giả lập_ 
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -245,5 +242,6 @@ private fun DateField(label: String, value: String) {
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    // Preview sẽ không hiển thị user thật, nên ta để null
+    ProfileScreen(user = null)
 }

@@ -8,10 +8,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.week5.ui.screens.LoginScreen
+import com.example.week5.ui.screens.ProfileScreen
 import com.example.week5.ui.theme.Week5Theme
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
@@ -22,54 +29,41 @@ import com.google.firebase.ktx.Firebase
 
 class MainActivity : ComponentActivity() {
 
-    // Khai báo Firebase Auth
     private lateinit var auth: FirebaseAuth
+    private lateinit var googleSignInClient: GoogleSignInClient
 
-    // 1. LẤY WEB CLIENT ID TỪ FILE JSON CỦA EM
-    // (Từ "client_id": "..." với "client_type": 3)
-    private val webClientId = "141845407169-dot2fioea3fga69lfro14896ctbo4jil.apps.googleusercontent.com"
+    private val webClientId by lazy {
+        getString(R.string.default_web_client_id)
+    }
 
-    // 2. TẠO "LAUNCHER" ĐỂ CHỜ KẾT QUẢ ĐĂNG NHẬP
-    // Đây là nơi nhận kết quả trả về từ màn hình chọn Google Account
     private val googleSignInLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == RESULT_OK) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             try {
-                // Lấy tài khoản Google thành công
                 val account = task.getResult(ApiException::class.java)!!
-
-                // Thông báo: Lấy Google Account thành công
-                Toast.makeText(this, "Đã lấy Google Account. Đang đăng nhập Firebase...", Toast.LENGTH_SHORT).show()
-
-                // 4. Dùng token của Google Account để đăng nhập Firebase
+                Toast.makeText(this, "Google Sign-In success. Logging in to Firebase...", Toast.LENGTH_SHORT).show()
                 firebaseAuthWithGoogle(account.idToken!!)
-
             } catch (e: ApiException) {
-                // Lỗi
-                Toast.makeText(this, "Lỗi Google Sign-In: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Google Sign-In failed: ${e.message}", Toast.LENGTH_LONG).show()
             }
         } else {
-            // Người dùng hủy
-            Toast.makeText(this, "Đăng nhập bị hủy", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Google Sign-In cancelled", Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Khởi tạo Auth
         auth = Firebase.auth
 
-        // Cấu hình Google Sign-In Options
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(webClientId) // Dùng Web Client ID
+            .requestIdToken(webClientId)
             .requestEmail()
             .build()
 
-        // Tạo Google Sign-In Client
-        val googleSignInClient = GoogleSignIn.getClient(this, gso)
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
 
         setContent {
             Week5Theme {
@@ -77,36 +71,65 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // Gọi màn hình Login của chúng ta
-                    LoginScreen(
-                        onSignInClick = {
-                            // 3. KHI NHẤN NÚT, GỌI LAUNCHER ĐỂ MỞ MÀN HÌNH CHỌN TÀI KHOẢN
-                            val signInIntent = googleSignInClient.signInIntent
-                            googleSignInLauncher.launch(signInIntent) // <-- ĐÂY LÀ HÀNH ĐỘNG CLICK
-                        }
-                    )
+                    AppNavigation()
                 }
             }
         }
     }
 
-    // 5. HÀM ĐĂNG NHẬP VÀO FIREBASE
+    @Composable
+    private fun AppNavigation() {
+        val navController = rememberNavController()
+        // *** SỬA LỖI: Cập nhật lại logic điều hướng sau khi đăng nhập
+        val startDestination = if (auth.currentUser != null) "profile" else "login"
+
+        NavHost(navController = navController, startDestination = startDestination) {
+            composable("login") {
+                LoginScreen(onSignInClick = { signIn() })
+            }
+            composable("profile") {
+                ProfileScreen(
+                    user = auth.currentUser,
+                    onSignOutClick = { signOut(navController) }
+                )
+            }
+        }
+
+        // Lắng nghe sự thay đổi trạng thái đăng nhập để điều hướng
+        auth.addAuthStateListener {
+            if (it.currentUser != null) {
+                navController.navigate("profile") {
+                    popUpTo("login") { inclusive = true }
+                }
+            }
+        }
+    }
+
+    private fun signIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        googleSignInLauncher.launch(signInIntent)
+    }
+
+    private fun signOut(navController: NavHostController) {
+        auth.signOut()
+        googleSignInClient.signOut().addOnCompleteListener(this) {
+            navController.navigate("login") {
+                popUpTo("profile") { inclusive = true }
+                launchSingleTop = true // Tránh tạo lại màn hình login nếu đã có
+            }
+        }
+    }
+
     private fun firebaseAuthWithGoogle(idToken: String) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // Đăng nhập Firebase thành công!
-                    val user = auth.currentUser
-
-                    // Thông báo kết quả (Firebase thành công)
-                    Toast.makeText(this, "Firebase: Đăng nhập thành công! (User: ${user?.email})", Toast.LENGTH_LONG).show()
-
-                    // TODO: Chuyển sang màn hình ProfileScreen
-
+                    Toast.makeText(this, "Firebase sign-in successful", Toast.LENGTH_SHORT).show()
+                    // Không cần làm gì ở đây nữa, AuthStateListener sẽ tự động điều hướng
                 } else {
-                    // Lỗi đăng nhập Firebase
-                    Toast.makeText(this, "Firebase Lỗi: ${task.exception?.message}", Toast.LENGTH_LONG).show()
+                    // *** SỬA LỖI: Thay LONG_SHOW thành LENGTH_LONG ***
+                    Toast.makeText(this, "Firebase sign-in failed: ${task.exception?.message}", Toast.LENGTH_LONG).show()
                 }
             }
     }
