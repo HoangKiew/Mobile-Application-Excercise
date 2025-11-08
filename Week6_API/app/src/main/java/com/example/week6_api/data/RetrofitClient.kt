@@ -6,7 +6,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "https://amock.io/"
+    // SỬA DÒNG NÀY:
+    // Đặt đường dẫn chung vào đây, và phải có dấu / ở cuối
+    private const val BASE_URL = "https://amock.io/api/researchUTH/"
 
     val instance: ApiService by lazy {
         val logging = HttpLoggingInterceptor()
@@ -17,8 +19,7 @@ object RetrofitClient {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            // Dùng GSON mặc định
+            .baseUrl(BASE_URL) // <-- Dùng BASE_URL đã sửa
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

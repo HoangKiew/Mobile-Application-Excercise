@@ -7,20 +7,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.ui.Modifier
-import com.example.week6_api.screens.AppNavigation // <-- Khôi phục
-import com.example.week6_api.ui.theme.Week6_apiTheme // <-- Khôi phục
+import com.example.week6_api.screens.AppNavigation
+import com.example.week6_api.ui.theme.Week6_apiTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // Khôi phục lại Theme của bạn
+            // Dùng theme bạn đã định nghĩa trong ui.theme
             Week6_apiTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    // Khôi phục lại AppNavigation
+                    // Gọi hàm điều hướng chính của app
                     AppNavigation()
                 }
             }

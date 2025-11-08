@@ -7,12 +7,15 @@ import retrofit2.http.Path
 
 interface ApiService {
 
-    @GET("api/researchUTH/tasks")
-    suspend fun getAllTasks(): Response<List<Task>>
+    // (Đã đúng)
+    @GET("tasks")
+    suspend fun getAllTasks(): Response<TaskApiResponse>
 
-    @GET("api/researchUTH/task/{id}")
-    suspend fun getTaskById(@Path("id") taskId: String): Response<Task>
+    // SỬA DÒNG NÀY:
+    @GET("task/{id}")
+    suspend fun getTaskById(@Path("id") taskId: String): Response<TaskDetailApiResponse> // <-- Sửa ở đây
 
-    @DELETE("api/researchUTH/task/{id}")
+    // (Đã đúng)
+    @DELETE("task/{id}")
     suspend fun deleteTaskById(@Path("id") taskId: String): Response<Unit>
 }

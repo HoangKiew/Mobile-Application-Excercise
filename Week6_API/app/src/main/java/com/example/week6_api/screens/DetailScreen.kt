@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.painter.Painter // <-- SỬA: Import Painter
+import androidx.compose.ui.graphics.painter.Painter // <-- Sửa: Import Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,18 +33,9 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun DetailScreen(
     navController: NavController,
-    viewModel: TaskViewModel, // <-- Giả sử đã khôi phục (không còn '?')
+    viewModel: TaskViewModel,
     taskId: String
 ) {
-    // Sửa lỗi Nullable ViewModel (nếu bạn vẫn đang debug)
-    // Nếu viewModel là null, hiển thị màn hình tải
-    if (viewModel == null) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text("ViewModel is loading...")
-        }
-        return
-    }
-
     val task by viewModel.selectedTask
     val isLoading by viewModel.isLoading
 
@@ -164,13 +155,13 @@ fun DetailTopBar(onBackClick: () -> Unit, onDeleteClick: () -> Unit) {
 @Composable
 fun TaskDetailHeader(task: Task) {
     Text(
-        text = task.title,
+        text = task.title ?: "", // <-- SỬA: Thêm ?: ""
         fontSize = 24.sp,
         fontWeight = FontWeight.Bold
     )
     Spacer(modifier = Modifier.height(8.dp))
     Text(
-        text = task.description,
+        text = task.description ?: "", // <-- SỬA: Thêm ?: ""
         fontSize = 16.sp,
         color = Color.Gray
     )
@@ -189,32 +180,30 @@ fun DetailInfoCard(task: Task) {
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // SỬA: Dùng icon ảnh của bạn
             InfoColumn(
                 painter = painterResource(id = R.drawable.icon_category),
-                text = task.category
+                text = task.category ?: "" // <-- SỬA: Thêm ?: ""
             )
             InfoColumn(
                 painter = painterResource(id = R.drawable.icon_status),
-                text = task.status
+                text = task.status ?: "" // <-- SỬA: Thêm ?: ""
             )
             InfoColumn(
                 painter = painterResource(id = R.drawable.icon_priority),
-                text = task.priority
+                text = task.priority ?: "" // <-- SỬA: Thêm ?: ""
             )
         }
     }
 }
 
 @Composable
-fun InfoColumn(painter: Painter, text: String) { // <-- SỬA: Dùng Painter
+fun InfoColumn(painter: Painter, text: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        // SỬA: Dùng Image thay vì Icon
         Image(
             painter = painter,
             contentDescription = text,
-            modifier = Modifier.size(24.dp), // Đặt kích thước
-            colorFilter = ColorFilter.tint(Color.Black) // Tô màu
+            modifier = Modifier.size(24.dp),
+            colorFilter = ColorFilter.tint(Color.Black)
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(text = text, fontWeight = FontWeight.Medium, fontSize = 14.sp, color = Color.Black)
@@ -244,7 +233,7 @@ fun SubtaskItem(subtask: Subtask) {
                 )
             )
             Text(
-                text = subtask.title,
+                text = subtask.title ?: "", // <-- SỬA: Thêm ?: ""
                 fontSize = 14.sp,
                 color = Color.DarkGray
             )
@@ -267,34 +256,30 @@ fun AttachmentItem(attachment: Attachment) {
             Image(
                 painter = painterResource(id = R.drawable.icon_attachment),
                 contentDescription = "Attachment",
-                // SỬA DÒNG NÀY:
-                colorFilter = ColorFilter.tint(Color.Gray),
+                colorFilter = ColorFilter.tint(Color.Gray), // <-- Đã sửa (lỗi từ lần trước)
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = attachment.name,
+                text = attachment.name ?: "", // <-- SỬA: Thêm ?: ""
                 fontSize = 14.sp,
                 color = Color.DarkGray
             )
         }
     }
 }
-// --- PREVIEWS CHO DETAILSCREEN (ĐÃ SỬA LỖI) ---
 
-// --- PREVIEWS CHO DETAILSCREEN (ĐÃ SỬA LỖI) ---
-
-// --- PREVIEWS CHO DETAILSCREEN (ĐÃ SỬA LỖI) ---
+// --- PREVIEWS CHO DETAILSCREEN (Dùng Int cho ID) ---
 
 val sampleSubtasks = listOf(
-    Subtask(id = 11, title = "Team Meeting", isCompleted = true), // <-- Sửa lại thành Int
-    Subtask(id = 12, title = "Prepare presentation slides", isCompleted = false) // <-- Sửa lại thành Int
+    Subtask(id = 11, title = "Team Meeting", isCompleted = true),
+    Subtask(id = 12, title = "Prepare presentation slides", isCompleted = false)
 )
 val sampleAttachments = listOf(
-    Attachment(id = 100, name = "document_1_0.pdf", fileUrl = "https://example.com/doc.pdf") // <-- Sửa lại thành Int
+    Attachment(id = 100, name = "document_1_0.pdf", fileUrl = "https://example.com/doc.pdf")
 )
 val sampleTaskForDetail = Task(
-    id = 1, // <-- Sửa lại thành Int
+    id = 1,
     title = "Complete Android Project",
     description = "Finish the UI, integrate API, and write documentation",
     status = "In Progress",
@@ -304,7 +289,6 @@ val sampleTaskForDetail = Task(
     subtasks = sampleSubtasks,
     attachments = sampleAttachments
 )
-// ... (code PreviewDetailTopBar và PreviewDetailScreenLayout giữ nguyên) ...
 
 @Preview(showBackground = true)
 @Composable
